@@ -1,56 +1,38 @@
 """
-A game with the possibility to move a player around the map
-
-Steps: 
--Define a map, and parts for the player walk
--Define a entity, starting with the player
--make the player walk around the defined world.
+snake game
 """
-import keyboard
 import time
 
 class Game():
 
+
     def run_game(self):
         screen = Screen()
-        player = Player(skin = 'O')
         done = False
+        player = Player(skin = 'O')
+
+        screen.printgame(player)
 
         while not done:
 
-            time.sleep(0.2)
-            print("\x1b[2J\x1b[1;1H")
+            if screen.world == screen.complete_world:
+                print('Parabéns! Você completou tudo!')
+                break
 
-            screen.world[player.position_y][player.position_x] = player.skin
+            print('Type your next move sequence with "w", "a", "s" and "d" ')
+            print('Press "q" to stop ')
 
-            print('*' * 10)
-            screen.printworld()
-            print('*' * 10)
+            move_sequence = input()
+            if move_sequence == 'q':
+                break
 
-            screen.world[player.position_y][player.position_x] = ' '
+            for movement in move_sequence:
+                player.move(movement)
+                screen.printgame(player)
+                time.sleep(0.2)
+                
             
-            print('Type your next move with w, a, s or d ')
-            print('Press "x" to stop ')
-
-            while True:
-                if keyboard.is_pressed('x'):
-                    done = True
-                    break
-                if keyboard.is_pressed('w'):
-                    player.move_up()
-                    break
-                if keyboard.is_pressed('s'):
-                    player.move_down()
-                    break
-                if keyboard.is_pressed('d'):
-                    player.move_right()
-                    break
-                if keyboard.is_pressed('a'):
-                    player.move_left()
-                    break
-
-        
-
+                
 
 class Screen():
     world = [
@@ -68,19 +50,43 @@ class Screen():
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
     ]
 
+    complete_world = [
+        ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'],
+        ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'],
+        ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'],
+        ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'],
+        ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'],
+    ]
+
     def printworld(self):
+        number_y = 0
+        print('  0 1 2 3 4 5 6 7 8 9 ') 
+        print('----------------------') 
         for tile in self.world:
-            tileprinted = ''
+            tileprinted = str(number_y) + '|'
+
             for space in tile:
-                tileprinted += space
+                tileprinted += space + ' ' 
+            number_y += 1
+   
             print(tileprinted)
+        
+    def printgame(self, player):
+
+            print("\x1b[2J\x1b[1;1H")
+
+            self.world[player.position_y][player.position_x] = player.skin
+
+            self.printworld()
+
+            self.world[player.position_y][player.position_x] = ' '
 
 
 class Entity():
+    position_x = int
+    position_y = int
 
-    def __init__(self, position_x = 0, position_y = 0, skin = str):
-        self.position_x = position_x
-        self.position_y = position_y
+    def __init__(self, skin = str):
         self.skin = skin
 
     def move_right(self):
@@ -99,11 +105,29 @@ class Entity():
         if not self.position_y == 4:
             self.position_y += 1
         
-    
 
 class Player(Entity):
-    pass    
+    position_y = 0
+    position_x = 0
+    
+    def move(self, input): 
         
+        moveset = {
+            'w' : 'self.move_up()',
+            's' : 'self.move_down()',
+            'd' : 'self.move_right()',
+            'a' : 'self.move_left()',
+        }
+
+        try:
+            eval(moveset[input])
+        except:
+            pass
+
+class Fruit(Entity):
+
+    def randomized_position():
+        pass       
 
 
 
