@@ -28,7 +28,13 @@ class Game():
                 break
 
             for movement in move_sequence:
-                player.move(movement)
+                player_movement = player.move(movement)
+
+                if not player_movement:
+                    done = True
+                    print('You died!')
+                    break 
+
                 screen.printgame(player)
                 time.sleep(0.2)
                 
@@ -99,18 +105,30 @@ class Entity():
     def move_right(self):
         if not self.position_x == 9:
             self.position_x += 1
+            return True
+        else:
+            return False
     
     def move_left(self):
         if not self.position_x == 0:
             self.position_x -= 1
+            return True
+        else:
+            return False
     
     def move_up(self):
         if not self.position_y == 0:
             self.position_y -= 1
+            return True
+        else:
+            return False
     
     def move_down(self):
         if not self.position_y == 4:
             self.position_y += 1
+            return True
+        else:
+            return False
         
 
 class Player(Entity):
@@ -128,9 +146,9 @@ class Player(Entity):
         }
 
         try:
-            eval(moveset[input])
+            return eval(moveset[input])
         except:
-            pass
+            return False
     
     def new_tail(self, position_y, position_x):
         self.tail.append([position_y, position_x])
