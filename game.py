@@ -2,7 +2,6 @@
 snake game
 """
 import time
-from turtle import position
 
 class Game():
 
@@ -12,13 +11,24 @@ class Game():
         done = False
         player = Player(skin = 'O')
 
+        print("""
+        
+
+███████ ███    ██  █████  ██   ██ ███████ 
+██      ████   ██ ██   ██ ██  ██  ██      
+███████ ██ ██  ██ ███████ █████   █████   
+     ██ ██  ██ ██ ██   ██ ██  ██  ██      
+███████ ██   ████ ██   ██ ██   ██ ███████ 
+                                          
+                                          
+
+""")
+        print('Type something to play!')
+        input()
+
         screen.printgame(player)
 
         while not done:
-
-            if screen.world == screen.complete_world:
-                print('Parabéns! Você completou tudo!')
-                break
 
             print('Type your next move sequence with "w", "a", "s" and "d" ')
             print('Press "q" to stop ')
@@ -30,9 +40,12 @@ class Game():
             for movement in move_sequence:
                 player_movement = player.move(movement)
 
+                if [player.position_y , player.position_x] in player.tail:
+                    done = screen.print_death_screen()
+                    break
+
                 if not player_movement:
-                    done = True
-                    print('You died!')
+                    done = screen.print_death_screen()
                     break 
 
                 screen.printgame(player)
@@ -48,21 +61,6 @@ class Screen():
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-    ]
-    default_world = [
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-    ]
-
-    complete_world = [
-        ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'],
-        ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'],
-        ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'],
-        ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'],
-        ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'],
     ]
 
     def printworld(self):
@@ -91,6 +89,23 @@ class Screen():
 
             for tail in player.tail:
                 self.world[tail[0]][tail[1]] = 'X'
+    
+    def print_death_screen(self):
+        
+        print("""
+        
+
+██    ██  ██████  ██    ██     ██████  ██ ███████ ██████      
+ ██  ██  ██    ██ ██    ██     ██   ██ ██ ██      ██   ██     
+  ████   ██    ██ ██    ██     ██   ██ ██ █████   ██   ██     
+   ██    ██    ██ ██    ██     ██   ██ ██ ██      ██   ██     
+   ██     ██████   ██████      ██████  ██ ███████ ██████      
+                                                              
+                                                              
+
+""")
+        return True
+
             
             
 
@@ -134,7 +149,7 @@ class Entity():
 class Player(Entity):
     position_y = 0
     position_x = 0
-    tail = [[0, 0], [0, 0], [0, 0]]
+    tail = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
     
     def move(self, input): 
         
