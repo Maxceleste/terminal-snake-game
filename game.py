@@ -2,6 +2,7 @@
 snake game
 """
 import time
+from turtle import position
 
 class Game():
 
@@ -79,7 +80,13 @@ class Screen():
 
             self.printworld()
 
-            self.world[player.position_y][player.position_x] = ' '
+            last_tail = player.tail_movement(player.position_y, player.position_x)
+            self.world[last_tail[0]][last_tail[1]] = ' '
+
+            for tail in player.tail:
+                self.world[tail[0]][tail[1]] = 'X'
+            
+            
 
 
 class Entity():
@@ -109,6 +116,7 @@ class Entity():
 class Player(Entity):
     position_y = 0
     position_x = 0
+    tail = [[0, 0], [0, 0], [0, 0]]
     
     def move(self, input): 
         
@@ -123,6 +131,17 @@ class Player(Entity):
             eval(moveset[input])
         except:
             pass
+    
+    def new_tail(self, position_y, position_x):
+        self.tail.append([position_y, position_x])
+    
+
+    def tail_movement(self, new_position_y, new_position_x):
+        last_tail = self.tail.pop(0)
+        self.tail.append([new_position_y, new_position_x])
+        return last_tail
+
+        
 
 class Fruit(Entity):
 
