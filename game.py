@@ -2,6 +2,7 @@
 snake game
 """
 import time
+import random
 
 class Game():
 
@@ -10,6 +11,9 @@ class Game():
         screen = Screen()
         done = False
         player = Player(skin = 'O')
+        fruit = Fruit('F')
+
+        print("\x1b[2J\x1b[1;1H")
 
         print("""
         
@@ -26,7 +30,9 @@ class Game():
         print('Type something to play!')
         input()
 
-        screen.printgame(player)
+        
+        fruit.randomized_position(player.tail, [player.position_y, player.position_x])
+        screen.printgame(player, fruit)
 
         while not done:
 
@@ -48,7 +54,7 @@ class Game():
                     done = screen.print_death_screen()
                     break 
 
-                screen.printgame(player)
+                screen.printgame(player, fruit)
                 time.sleep(0.2)
                 
             
@@ -66,29 +72,38 @@ class Screen():
     def printworld(self):
         number_y = 0
         print('  0 1 2 3 4 5 6 7 8 9 ') 
-        print('----------------------') 
+        print('  --------------------') 
         for tile in self.world:
             tileprinted = str(number_y) + '|'
 
             for space in tile:
                 tileprinted += space + ' ' 
+            tileprinted += '|'
             number_y += 1
    
             print(tileprinted)
-        
-    def printgame(self, player):
+        print('  --------------------')
+
+    def printgame(self, player, fruit):
 
             print("\x1b[2J\x1b[1;1H")
 
-            self.world[player.position_y][player.position_x] = player.skin
-
-            self.printworld()
-
-            last_tail = player.tail_movement(player.position_y, player.position_x)
-            self.world[last_tail[0]][last_tail[1]] = ' '
-
+            self.world[fruit.position_y][fruit.position_x] = fruit.skin  
+            self.world[player.position_y][player.position_x] = player.skin  
             for tail in player.tail:
-                self.world[tail[0]][tail[1]] = 'X'
+                self.world[tail[0]][tail[1]] = 'X' 
+
+            if not player.tail == []:   
+                last_tail = player.tail_movement(player.position_y, player.position_x)
+                self.printworld()
+                self.world[last_tail[0]][last_tail[1]] = ' '  
+            else:
+                self.printworld()  
+                self.world[player.position_y][player.position_x] = ' '
+
+            
+
+
     
     def print_death_screen(self):
         
@@ -149,7 +164,7 @@ class Entity():
 class Player(Entity):
     position_y = 0
     position_x = 0
-    tail = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
+    tail = []
     
     def move(self, input): 
         
@@ -177,9 +192,20 @@ class Player(Entity):
         
 
 class Fruit(Entity):
+    position_y = 0
+    position_x = 0
 
-    def randomized_position():
-        pass       
+
+    def randomized_position(self, tail, player_position):
+        while True:
+            self.position_y = random.randrange(5)
+            self.position_x = random.randrange(10)
+            fruit_position = [self.position_x, self.position_y]
+
+            if fruit_position in tail or fruit_position == player_position:
+                continue 
+            else:
+                break
 
 
 
