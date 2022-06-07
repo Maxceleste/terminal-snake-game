@@ -77,13 +77,17 @@ class Fruit(Entity):
     position_x = 0
 
 
-    def randomized_position(self, tail, player_position):
-        while True:
-            self.position_y = random.randrange(5)
-            self.position_x = random.randrange(10)
-            fruit_position = [self.position_y, self.position_x]
+    def randomized_position(self, tails, player_position):
+        positions = []
+        for y in range(5):
+            for x in range(10):
+                positions.append([y, x])
+            
+        positions.remove(player_position)
+        for tail in tails:
+            positions.remove(tail)
 
-            if fruit_position in tail or fruit_position == player_position:
-                continue 
-            else:
-                break
+        new_position = random.choice(positions)
+
+        self.position_y = new_position[0]
+        self.position_x = new_position[1]
