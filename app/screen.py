@@ -17,7 +17,11 @@ class Screen():
         self.world[4] = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
 
     def update_world(self, player, fruit):
-        self.world[fruit.position_y][fruit.position_x] = fruit.skin
+        try:
+            self.world[fruit.position_y][fruit.position_x] = fruit.skin
+        except:
+            pass
+
         self.world[player.position_y][player.position_x] = player.skin
         for tail in player.tail:
             self.world[tail[0]][tail[1]] = 'X'
@@ -31,10 +35,14 @@ class Screen():
         print('Type "Enter" to play or type "help" to learn how to play.')
         
         comand = input()
+        if comand == 'debug':
+            return True
 
-        if comand == 'help':
+        elif comand == 'help':
             print(arts.help_text)
-            input('Type "Enter to play"')
+            input('Type "Enter" to play')
+
+        return False
 
 
     def printworld(self):
@@ -52,21 +60,20 @@ class Screen():
             print(tileprinted)
         print('  --------------------')
 
-    def printgame(self, player, fruit, last_tail = []):
+    def printgame(self, player, fruit, attempts, debug = bool):
 
             print("\x1b[2J\x1b[1;1H")
+            self.update_world(player, fruit)
+            print('Attempts:', attempts - 1)
             print('Player lenght:', len(player.tail) + 1)
-            print(player.tail)
-            print('posição y:', player.position_y)
-            print('posição x:', player.position_x)
 
-            self.world[fruit.position_y][fruit.position_x] = fruit.skin  
-            self.world[player.position_y][player.position_x] = player.skin  
-            for tail in player.tail:
-                self.world[tail[0]][tail[1]] = 'X' 
-            
-            for tile in self.world:
-                print(tile)
+            if debug:  
+                print(player.tail)
+                print('posição y:', player.position_y)
+                print('posição x:', player.position_x)
+                for tile in self.world:
+                    print(tile)
+
 
             if not player.tail == []:   
                 self.printworld()

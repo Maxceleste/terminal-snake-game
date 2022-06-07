@@ -86,8 +86,11 @@ class Fruit(Entity):
         positions.remove(player_position)
         for tail in tails:
             positions.remove(tail)
+        try:
+            new_position = random.choice(positions)
+            self.position_y = new_position[0]
+            self.position_x = new_position[1]
+        except:
 
-        new_position = random.choice(positions)
-
-        self.position_y = new_position[0]
-        self.position_x = new_position[1]
+            self.position_y = None
+            self.position_x = None

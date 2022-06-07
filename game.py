@@ -15,15 +15,23 @@ class Game():
         player = Player(skin = 'O')
         fruit = Fruit('F')
 
-        screen.print_initial_screen()
 
+        comand = screen.print_initial_screen()
+
+        attempts = 3
         fruit.randomized_position(player.tail, [player.position_y, player.position_x])
-        screen.printgame(player, fruit)
+        screen.printgame(player, fruit, attempts, comand)
 
         while not done:
+            attempts -= 1
 
             if len(player.tail) == 49:
                 screen.print_win_screen()
+                break
+
+            if attempts == 0:
+                done = screen.print_death_screen()
+                print('You have no more attempts!')
                 break
 
             print('Type your next move sequence with "w", "a", "s" and "d" ')
@@ -44,34 +52,38 @@ class Game():
 
                 if eated_fruit:
                     done = screen.print_death_screen()
+                    print('You have to stop when you eat the fruit!')
                     break
 
                 player_movement = player.move(movement)
-                last_tail = [player.position_y, player.position_x]
 
                 if [player.position_y , player.position_x] in player.tail:
                     done = screen.print_death_screen()
+                    print('You hit yourself!')
                     break
 
                 if not player_movement:
                     done = screen.print_death_screen()
+                    print('You pressed an invalid key!')
                     break
 
 
                 if not player.tail == []:
                     initial_position_y = player.tail[0][0]
                     initial_position_x = player.tail[0][1]
-                    last_tail = player.tail_movement(player_movement[0], player_movement[1])
+                    player.tail_movement(player_movement[0], player_movement[1])
 
             
                 if [player.position_y , player.position_x] == [fruit.position_y, fruit.position_x]:
                     eated_fruit = True
                     player.new_tail(initial_position_y, initial_position_x)
                     fruit.randomized_position(player.tail, [player.position_y, player.position_x])
+                    attempts = 3
 
-
-                screen.printgame(player, fruit, last_tail)
+                
+                screen.printgame(player, fruit, attempts, comand)
                 time.sleep(0.2)
+
 
 
 

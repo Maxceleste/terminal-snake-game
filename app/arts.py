@@ -24,7 +24,7 @@ help_text = """The game is simple: You have two attemps to make a sequence of mo
 If you eat the fruit, but still have a sequence of movements to do, you will die.
 You need to eat the fruit on your last movement in the sequence
 
-If you don't eat in two attemps, hit a wall or hit in your tail, you die.
+If you don't eat in two attemps, press a key that is not used in the game, hit a wall or hit in your tail, you die.
 
 Every time you eat a fruit, you become bigger, and is more hard to predict your tail move.
 
