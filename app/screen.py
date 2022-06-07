@@ -9,6 +9,20 @@ class Screen():
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
     ]
 
+    def clear_world(self):
+        self.world[0] = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+        self.world[1] = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '] 
+        self.world[2] = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '] 
+        self.world[3] = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '] 
+        self.world[4] = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+
+    def update_world(self, player, fruit):
+        self.world[fruit.position_y][fruit.position_x] = fruit.skin
+        self.world[player.position_y][player.position_x] = player.skin
+        for tail in player.tail:
+            self.world[tail[0]][tail[1]] = 'X'
+
+
     def print_initial_screen(self):
         print("\x1b[2J\x1b[1;1H")
 
@@ -38,22 +52,30 @@ class Screen():
             print(tileprinted)
         print('  --------------------')
 
-    def printgame(self, player, fruit):
+    def printgame(self, player, fruit, last_tail = []):
 
             print("\x1b[2J\x1b[1;1H")
+            print('Player lenght:', len(player.tail) + 1)
+            print(player.tail)
+            print('posição y:', player.position_y)
+            print('posição x:', player.position_x)
 
             self.world[fruit.position_y][fruit.position_x] = fruit.skin  
             self.world[player.position_y][player.position_x] = player.skin  
             for tail in player.tail:
                 self.world[tail[0]][tail[1]] = 'X' 
+            
+            for tile in self.world:
+                print(tile)
 
             if not player.tail == []:   
-                last_tail = player.tail_movement(player.position_y, player.position_x)
                 self.printworld()
-                self.world[last_tail[0]][last_tail[1]] = ' '  
+                self.clear_world()
+                 
+
             else:
                 self.printworld()  
-                self.world[player.position_y][player.position_x] = ' '  
+                self.clear_world()  
         
     
     def print_death_screen(self):

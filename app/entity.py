@@ -16,30 +16,34 @@ class Player(Entity):
     tail = []
 
     def move_right(self):
+        old_position = [self.position_y, self.position_x]
         if not self.position_x == 9:
             self.position_x += 1
-            return True
+            return old_position
         else:
             return False
     
     def move_left(self):
+        old_position = [self.position_y, self.position_x]
         if not self.position_x == 0:
             self.position_x -= 1
-            return True
+            return old_position
         else:
             return False
     
     def move_up(self):
+        old_position = [self.position_y, self.position_x]
         if not self.position_y == 0:
             self.position_y -= 1
-            return True
+            return old_position
         else:
             return False
     
     def move_down(self):
+        old_position = [self.position_y, self.position_x]
         if not self.position_y == 4:
             self.position_y += 1
-            return True
+            return old_position
         else:
             return False
     
@@ -58,13 +62,13 @@ class Player(Entity):
             return False
     
     def new_tail(self, position_y, position_x):
-        self.tail.append([position_y, position_x])
+        self.tail.insert(0, [position_y, position_x])
     
 
     def tail_movement(self, new_position_y, new_position_x):
         last_tail = self.tail.pop(0)
         self.tail.append([new_position_y, new_position_x])
-        return last_tail
+        return self.tail[0]
 
         
 
