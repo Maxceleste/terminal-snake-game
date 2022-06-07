@@ -81,7 +81,7 @@ class Fruit(Entity):
         while True:
             self.position_y = random.randrange(5)
             self.position_x = random.randrange(10)
-            fruit_position = [self.position_x, self.position_y]
+            fruit_position = [self.position_y, self.position_x]
 
             if fruit_position in tail or fruit_position == player_position:
                 continue 
