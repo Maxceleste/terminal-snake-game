@@ -64,7 +64,6 @@ class Game():
 
                 if not player_movement:
                     done = screen.print_death_screen()
-                    print('You pressed an invalid key!')
                     break
 
 
