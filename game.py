@@ -57,10 +57,7 @@ class Game():
 
                 player_movement = player.move(movement)
 
-                if [player.position_y , player.position_x] in player.tail:
-                    done = screen.print_death_screen()
-                    print('You hit yourself!')
-                    break
+                
 
                 if not player_movement:
                     done = screen.print_death_screen()
@@ -71,6 +68,12 @@ class Game():
                     initial_position_y = player.tail[0][0]
                     initial_position_x = player.tail[0][1]
                     player.tail_movement(player_movement[0], player_movement[1])
+                
+                
+                if [player.position_y , player.position_x] in player.tail:
+                    done = screen.print_death_screen()
+                    print('You hit yourself!')
+                    break
 
             
                 if [player.position_y , player.position_x] == [fruit.position_y, fruit.position_x]:
