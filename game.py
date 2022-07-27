@@ -1,5 +1,6 @@
 """
-snake game
+SNAKE GAME
+made by Maxceleste
 """
 import time
 from app.screen import Screen
@@ -7,22 +8,32 @@ from app.entity import Player, Fruit
 
 
 class Game():
+    """
+    This class have the main function in the code, and make the game run.
+    """
 
 
     def run_game(self):
+        """
+        This function does not have any paramaters, only call all the others functions and classes,
+        and make the game run.
+        """
         screen = Screen()
-        done = False
         player = Player(skin = 'O')
         fruit = Fruit('F')
+        done = False
 
+        comand = screen.print_initial_screen() #return True or False to debug mode
 
-        comand = screen.print_initial_screen()
-
-        attempts = 3
-        fruit.randomized_position(player.tail, [player.position_y, player.position_x])
-        screen.printgame(player, fruit, attempts, comand)
+        attempts = 3 #Player initial attempts (in the game is 2)
+        fruit.randomized_position(player.tail, [player.position_y, player.position_x]) #Start the fruit position
+        screen.printgame(player, fruit, attempts, comand) #Show the first game frame.
 
         while not done:
+            """
+            Game loop
+            """
+
             attempts -= 1
 
             if len(player.tail) == 49:
